@@ -18,13 +18,17 @@ Route::get('/vehicles', [CatalogController::class,'index'])->name('vehicles.inde
 Route::get('/vehicles/{vehicle}', [CatalogController::class,'show'])->name('vehicles.show');
 
 Route::middleware('auth')->group(function(){
+
+  // RESERVAS
   Route::get('/reservation/{vehicle}', [ReservationController::class,'create'])->name('reservations.create');
   Route::post('/reservation', [ReservationController::class,'store'])->name('reservations.store');
   Route::get('/reservations', [ReservationController::class,'my'])->name('reservations.my');
 
+  // PAGOS (solo una vez)
   Route::get('/payments/{reservation}/checkout', [PaymentController::class,'checkout'])->name('payments.checkout');
   Route::post('/payments/{reservation}/process', [PaymentController::class,'process'])->name('payments.process');
 
+  // PERFIL
   Route::get('/profile', [ProfileController::class,'show'])->name('profile.show');
   Route::post('/profile/payment-method', [ProfileController::class,'storePaymentMethod'])->name('profile.payment.store');
 });
