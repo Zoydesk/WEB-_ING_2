@@ -8,7 +8,6 @@ use App\Http\Controllers\{
 
 Route::get('/', [CatalogController::class,'index'])->name('home');
 
-
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
 Route::post('/login', [AuthController::class,'login']);
 Route::get('/register', [AuthController::class,'showRegister'])->name('register');
@@ -30,14 +29,7 @@ Route::middleware('auth')->group(function(){
   Route::post('/profile/payment-method', [ProfileController::class,'storePaymentMethod'])->name('profile.payment.store');
 });
 
-Route::middleware(['auth'])->group(function(){
-  Route::get('/worker/deliver/{reservation}', [WorkerController::class,'deliver'])->name('worker.deliver');
-  Route::post('/worker/deliver/{reservation}', [WorkerController::class,'confirmDeliver']);
-  Route::get('/worker/receive/{reservation}', [WorkerController::class,'receive'])->name('worker.receive');
-  Route::post('/worker/receive/{reservation}', [WorkerController::class,'confirmReceive']);
-});
-
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth','can:admin'])->group(function(){
   Route::get('/admin', [AdminController::class,'dashboard'])->name('admin.dashboard');
   Route::get('/admin/vehicles', [AdminController::class,'index'])->name('admin.vehicles.index');
   Route::get('/admin/vehicles/create', [AdminController::class,'create'])->name('admin.vehicles.create');
@@ -45,4 +37,12 @@ Route::middleware(['auth'])->group(function(){
   Route::get('/admin/vehicles/{vehicle}/edit', [AdminController::class,'edit'])->name('admin.vehicles.edit');
   Route::post('/admin/vehicles/{vehicle}', [AdminController::class,'update'])->name('admin.vehicles.update');
   Route::delete('/admin/vehicles/{vehicle}', [AdminController::class,'destroy'])->name('admin.vehicles.destroy');
+});
+
+Route::middleware(['auth','can:worker'])->group(function(){
+  Route::get('/worker', [WorkerController::class,'dashboard'])->name('worker.dashboard');
+  Route::get('/worker/deliver/{reservation}', [WorkerController::class,'deliver'])->name('worker.deliver');
+  Route::post('/worker/deliver/{reservation}', [WorkerController::class,'confirmDeliver']);
+  Route::get('/worker/receive/{reservation}', [WorkerController::class,'receive'])->name('worker.receive');
+  Route::post('/worker/receive/{reservation}', [WorkerController::class,'confirmReceive']);
 });

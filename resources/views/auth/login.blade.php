@@ -37,20 +37,32 @@
         <div class="card glass rounded-4">
           <div class="card-body p-4 p-md-5">
             <h2 class="fw-semibold mb-4">Ingresar</h2>
-            <form method="post" action="/login" class="row g-3">
+
+            <form method="post" action="{{ url('/login') }}" class="row g-3">
               @csrf
               <div class="col-12">
                 <label class="form-label">Email</label>
-                <input name="email" type="email" class="form-control input-xl" required placeholder="tu@email.com">
+                <input name="email" type="email" class="form-control input-xl"
+                       value="{{ old('email') }}" required placeholder="tu@email.com">
               </div>
               <div class="col-12">
                 <label class="form-label">Contraseña</label>
                 <input name="password" type="password" class="form-control input-xl" required placeholder="••••••••">
               </div>
-              <div class="col-12 d-grid mt-2">
-                <button class="btn btn-primary btn-lg py-3">Entrar</button>
+              <div class="col-12 d-flex align-items-center justify-content-between">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                  <label class="form-check-label" for="remember">Recordarme</label>
+                </div>
+                <button class="btn btn-primary btn-lg px-4">Entrar</button>
               </div>
+              @if ($errors->any())
+                <div class="alert alert-danger mt-2 mb-0">
+                  {{ $errors->first() }}
+                </div>
+              @endif
             </form>
+
             <div class="text-center mt-3">
               <span class="text-secondary">¿No tienes cuenta?</span>
               <a class="link-light" href="{{ route('register') }}">Crear una ahora</a>
@@ -58,6 +70,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>

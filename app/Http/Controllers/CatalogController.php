@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CatalogController extends Controller {
   public function index(Request $r){
@@ -19,10 +20,9 @@ class CatalogController extends Controller {
       });
     }
 
-    // disponibilidad por rango de fechas: excluye vehículos con reservas que se solapan
     if($r->filled('start_at') && $r->filled('end_at')){
-      $start = \Carbon\Carbon::parse($r->start_at);
-      $end   = \Carbon\Carbon::parse($r->end_at);
+      $start = Carbon::parse($r->start_at);
+      $end   = Carbon::parse($r->end_at);
       $q->whereDoesntHave('reservations', function($qr) use($start,$end){
         $qr->whereIn('status',['PENDING','CONFIRMED','IN_PROGRESS'])
            ->where(function($x) use($start,$end){
@@ -37,5 +37,10 @@ class CatalogController extends Controller {
 
     $vehicles = $q->orderBy('name')->paginate(12)->appends($r->query());
     return view('catalog.index', compact('vehicles'));
+  }
+
+  public function show(Vehicle $vehicle){
+    $vehicle->load('rate');
+    return view('catalog.show', compact('vehicle'));
   }
 }

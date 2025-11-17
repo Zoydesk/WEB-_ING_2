@@ -7,11 +7,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable {
-    use HasFactory, Notifiable;
+  use HasFactory, Notifiable;
 
-    protected $fillable = ['name','email','password','phone','role'];
-    protected $hidden = ['password','remember_token'];
+  protected $fillable = ['name','email','password','phone','role'];
+  protected $hidden = ['password','remember_token'];
 
-    public function reservations(){ return $this->hasMany(Reservation::class); }
-    public function paymentMethods(){ return $this->hasMany(PaymentMethod::class); }
+  public function reservations(){ return $this->hasMany(Reservation::class); }
+  public function paymentMethods(){ return $this->hasMany(PaymentMethod::class); }
 }

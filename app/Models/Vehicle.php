@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vehicle extends Model
 {
-    protected $fillable = ['name', 'brand', 'category', 'description', 'image', 'status'];
+    protected $fillable = ['name', 'brand', 'category', 'description', 'image', 'status', 'stock'];
     public function rate()
     {
         return $this->hasOne(Rate::class);
@@ -26,7 +26,6 @@ class Vehicle extends Model
             default => $this->category,
         };
     }
-
     public function inStock(): bool
     {
         return $this->stock > 0;
