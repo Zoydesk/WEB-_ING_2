@@ -29,9 +29,25 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navMain" class="navbar">
+    <div id="navMain" class="">
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link" href="{{ route('vehicles.index') }}">Vehículos</a></li>
+
+        @can('admin')
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Administración
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="adminMenu">
+              <li><a class="dropdown-item" href="{{ route('admin.vehicles.index') }}">Todos los vehículos</a></li>
+              <li><a class="dropdown-item" href="{{ route('admin.vehicles.create') }}">Agregar vehículo</a></li>
+            </ul>
+          </li>
+        @endcan
+
+        @can('worker')
+          <li class="nav-item"><a class="nav-link" href="{{ route('worker.dashboard') }}">Trabajador</a></li>
+        @endcan
       </ul>
 
       <ul class="navbar-nav ms-auto">
@@ -39,6 +55,7 @@
           <li class="nav-item me-2"><a class="btn btn-outline-light" href="{{ route('login') }}">Ingresar</a></li>
           <li class="nav-item"><a class="btn btn-primary" href="{{ route('register') }}">Registro</a></li>
         @endguest
+
         @auth
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -47,12 +64,7 @@
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href="{{ route('reservations.my') }}">Mis reservas</a></li>
               <li><a class="dropdown-item" href="{{ route('profile.show') }}">Perfil</a></li>
-              @can('worker')
-                <li><a class="dropdown-item" href="{{ route('worker.dashboard') }}">Trabajador</a></li>
-              @endcan
-              @can('admin')
-                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin</a></li>
-              @endcan
+              @can('admin') <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Panel Admin</a></li> @endcan
               <li><hr class="dropdown-divider"></li>
               <li>
                 <form action="{{ route('logout') }}" method="post" class="px-3">@csrf
@@ -66,6 +78,14 @@
     </div>
   </div>
 </nav>
+
+@auth
+  <div class="alert alert-info container container-wide mt-3">
+    Usuario: {{ auth()->user()->email }} • Rol: {{ auth()->user()->role }}
+    • @can('admin') CAN:admin=SI @else CAN:admin=NO @endcan
+  </div>
+@endauth
+
 
 <main class="container container-wide py-4 hero">
   @if(session('ok')) <div class="alert alert-success">{{ session('ok') }}</div> @endif

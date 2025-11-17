@@ -6,10 +6,18 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 
-class AuthServiceProvider extends ServiceProvider {
-  protected $policies = [];
-  public function boot(): void {
-    Gate::define('admin', fn(User $u)=>$u->role==='admin');
-    Gate::define('worker', fn(User $u)=>$u->role==='worker');
-  }
+class AuthServiceProvider extends ServiceProvider
+{
+    protected $policies = [];
+
+    public function boot(): void
+    {
+        Gate::define('admin', function (User $u) {
+            return $u->role === 'admin';
+        });
+
+        Gate::define('worker', function (User $u) {
+            return $u->role === 'worker';
+        });
+    }
 }
