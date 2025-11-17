@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
     foreach ($cars as $c) {
       $v = \App\Models\Vehicle::create($c);
       \App\Models\Rate::create(['vehicle_id' => $v->id, 'hour_price' => rand(4, 12)]);
+      $v = Vehicle::create($c + ['stock'=>rand(2,6)]);
+
     }
   }
 }

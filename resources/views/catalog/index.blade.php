@@ -1,13 +1,15 @@
 @extends('layouts.app')
 @section('content')
-<h1 class="mb-3">Vehículos</h1>
-
-<div class="card shadow-sm mb-3">
+<div class="card glass shadow-sm mb-3">
   <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h1 class="h3 mb-0">Vehículos</h1>
+      <span class="text-secondary">Micromovilidad limpia y divertida</span>
+    </div>
     <form method="get" action="{{ route('vehicles.index') }}" class="row g-3 align-items-end">
       <div class="col-sm-6 col-md-3">
         <label class="form-label">Categoría</label>
-        <select name="category" class="form-select">
+        <select name="category" class="form-select form-select-lg">
           <option value="">Todas</option>
           @foreach(['SCOOTER_ELECTRICO'=>'Scooter eléctrico','BICI'=>'Bicicleta','MOTO_ELECTRICA'=>'Moto eléctrica','PATINES'=>'Patines'] as $val=>$label)
             <option value="{{ $val }}" @selected(request('category')===$val)>{{ $label }}</option>
@@ -16,26 +18,22 @@
       </div>
       <div class="col-sm-6 col-md-3">
         <label class="form-label">Marca</label>
-        <input name="brand" class="form-control" value="{{ request('brand') }}" placeholder="EcoMove, VoltMoto">
+        <input name="brand" class="form-control form-control-lg" value="{{ request('brand') }}" placeholder="EcoMove, VoltMoto">
       </div>
       <div class="col-6 col-md-2">
         <label class="form-label">Precio min</label>
-        <input type="number" step="0.01" name="min_price" class="form-control" value="{{ request('min_price') }}">
+        <input type="number" step="0.01" name="min_price" class="form-control form-control-lg" value="{{ request('min_price') }}">
       </div>
       <div class="col-6 col-md-2">
         <label class="form-label">Precio máx</label>
-        <input type="number" step="0.01" name="max_price" class="form-control" value="{{ request('max_price') }}">
+        <input type="number" step="0.01" name="max_price" class="form-control form-control-lg" value="{{ request('max_price') }}">
       </div>
       <div class="col-6 col-md-2">
         <label class="form-label">Inicio</label>
-        <input type="datetime-local" name="start_at" class="form-control" value="{{ request('start_at') }}">
-      </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label">Fin</label>
-        <input type="datetime-local" name="end_at" class="form-control" value="{{ request('end_at') }}">
+        <input type="datetime-local" name="start_at" class="form-control form-control-lg" value="{{ request('start_at') }}">
       </div>
       <div class="col-12 col-md-auto">
-        <button class="btn btn-primary">Filtrar</button>
+        <button class="btn btn-primary btn-lg">Filtrar</button>
       </div>
     </form>
   </div>
@@ -44,7 +42,7 @@
 <div class="row g-3">
 @foreach($vehicles as $v)
   <div class="col-sm-6 col-lg-3">
-    <div class="card h-100 shadow-sm">
+    <div class="card glass h-100">
       @php
         $tags = match($v->category){
           'SCOOTER_ELECTRICO' => 'electric scooter,city',
@@ -68,6 +66,8 @@
           <a class="btn btn-outline-light btn-sm" href="{{ route('vehicles.show',$v) }}">Ver detalles</a>
           @auth
             <a class="btn btn-primary btn-sm" href="{{ route('reservations.create',$v) }}">Reservar</a>
+          @else
+            <a class="btn btn-primary btn-sm" href="{{ route('login') }}">Ingresar para reservar</a>
           @endauth
         </div>
       </div>

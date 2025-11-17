@@ -26,4 +26,17 @@ class Vehicle extends Model
             default => $this->category,
         };
     }
+
+    public function inStock(): bool
+    {
+        return $this->stock > 0;
+    }
+    public function decrementStock(): void
+    {
+        $this->decrement('stock');
+    }
+    public function incrementStock(): void
+    {
+        $this->increment('stock');
+    }
 }
