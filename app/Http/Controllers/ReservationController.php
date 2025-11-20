@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\{Vehicle, Reservation};
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\User;
+
 
 class ReservationController extends Controller
 {
@@ -16,10 +18,14 @@ class ReservationController extends Controller
 
   public function store(Request $r)
   {
+
+    $minStart = now()->addHours(2);
+    
     $data = $r->validate([
       'vehicle_id' => 'required|exists:vehicles,id',
-      'start_at' => 'required|date|after:now',
-      'end_at' => 'required|date|after:start_at',
+      // start_at debe ser al menos dentro de 2 horas
+      'start_at' => ['required', 'date', 'after_or_equal:' . $minStart],
+      'end_at'   => ['required', 'date', 'after:start_at'],
       'delivery_mode' => 'required|in:AGENCY,HOME',
       'delivery_address' => 'nullable|string'
     ]);

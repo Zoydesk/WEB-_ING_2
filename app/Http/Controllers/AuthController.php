@@ -41,4 +41,32 @@ class AuthController extends Controller
         $r->session()->regenerateToken();
         return redirect()->route('login');
     }
+
+    public function showRegister()
+    {
+        return view('auth.register'); // ajusta al nombre real de tu vista
+    }
+
+    public function register(Request $request)
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'max:255', 'unique:users'],
+        'phone' => ['required', 'string', 'max:20'],
+        'password' => ['required', 'confirmed', 'min:8'],
+    ]);
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'password' => Hash::make($request->password),
+    ]);
+
+    // Si quieres loguearlo automáticamente:
+    Auth::login($user);
+
+    return redirect()->route('vehicles.index');
+}
+
 }

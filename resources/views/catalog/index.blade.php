@@ -66,10 +66,33 @@
                             <span class="badge text-bg-secondary">{{ $v->category_label }}</span>
                         </div>
                         <p class="text-secondary mb-1">{{ $v->brand }}</p>
+
+                        @php
+                            $avg = round($v->reservations_avg_rating ?? 0, 1);
+                            $fullStars = floor($avg);
+                        @endphp
+
+                        @if ($avg > 0)
+                            <p class="mb-1">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $fullStars)
+                                        ★
+                                    @else
+                                        ☆
+                                    @endif
+                                @endfor
+                                <span class="text-secondary small">({{ $avg }})</span>
+                            </p>
+                        @else
+                            <p class="mb-1 text-secondary small">Sin reseñas</p>
+                        @endif
+
+
                         <p class="mb-3">Precio/hora: <span
                                 class="fw-semibold">${{ number_format(optional($v->rate)->hour_price, 2) }}</span></p>
                         <div class="d-flex gap-2">
-                            <a class="btn btn-outline-light btn-sm" href="{{ route('vehicles.show', $v) }}">Ver detalles</a>
+                            <a class="btn btn-outline-light btn-sm" href="{{ route('vehicles.show', $v) }}">Ver
+                                detalles</a>
                             @auth
                                 <a class="btn btn-primary btn-sm" href="{{ route('reservations.create', $v) }}">Reservar</a>
                             @else

@@ -38,4 +38,9 @@ class Vehicle extends Model
     {
         $this->increment('stock');
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

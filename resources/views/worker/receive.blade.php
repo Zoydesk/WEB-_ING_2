@@ -1,29 +1,29 @@
 @extends('layouts.app')
 @section('content')
 <h1 class="mb-3">Devolución Reserva #{{ $reservation->id }}</h1>
+
 <div class="card shadow-sm">
   <div class="card-body">
-    <form method="post" action="" class="row g-3">
+    <p class="mb-2">
+      Devolución del vehículo <strong>{{ $reservation->vehicle->name }}</strong> completada con éxito.
+    </p>
+
+    <p class="text-secondary mb-3">
+      Cliente: {{ $reservation->user->name }}
+      • Tel: {{ $reservation->user->phone ?? '—' }}
+    </p>
+
+    <p class="mb-3">
+      Gracias por registrar la devolución.
+      La calificación y el comentario sobre el vehículo deben ser completados por el usuario en su panel.
+    </p>
+
+    {{-- Botón para confirmar y actualizar el estado en BD --}}
+    <form method="POST" action="{{ route('worker.receive', $reservation) }}">
       @csrf
-      <div class="col-12">
-        <p>Confirmar recepción del vehículo <strong>{{ $reservation->vehicle->name }}</strong></p>
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Puntuación (1 a 5)</label>
-        <select name="rating" class="form-select">
-          <option value="">Sin calificar</option>
-          @for($i=1;$i<=5;$i++)
-            <option value="{{ $i }}">{{ $i }}</option>
-          @endfor
-        </select>
-      </div>
-      <div class="col-md-9">
-        <label class="form-label">Comentario</label>
-        <input name="rating_comment" class="form-control" placeholder="¿Cómo fue la experiencia?">
-      </div>
-      <div class="col-12">
-        <button class="btn btn-primary">Confirmar Recepción</button>
-      </div>
+      <button class="btn btn-success">
+        Confirmar recepción
+      </button>
     </form>
   </div>
 </div>
